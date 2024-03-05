@@ -1,7 +1,7 @@
 const amqplib = require('amqplib')
 let _connection = null
 let _channel = getChannel('eb-node-express-2')
-createQueues('E', 'positions', 'P', 'events', 'E')
+createQueues('E', 'positions', 'P-new', 'events', 'E')
   .then().catch(e => console.error('ERROR', e))
 
 async function createQueues (exchange, positionsQueue, positionsKey, eventsQueue, eventsKey) {
@@ -49,7 +49,7 @@ async function tryChannel (name, retries = 3) {
     } else { throw e }
   }
 }
-const send = async (message, exchange = 'E', routingKey = 'P', name = 'eb-node-express-positions', retries = 3) => {
+const send = async (message, exchange = 'E', routingKey = 'P-new', name = 'eb-node-express-positions', retries = 3) => {
   try {
     const channel = await tryChannel(name)
     channel.publish(exchange, routingKey, Buffer.from(message))
